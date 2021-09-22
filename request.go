@@ -119,21 +119,21 @@ func decodeRequest(r io.Reader) (*request, int, error) {
 func allocateBody(key, version int16) protocolBody {
 	switch key {
 	case 0:
-		return &ProduceRequest{}
+		return &ProduceRequest{Version: version}
 	case 1:
 		return &FetchRequest{Version: version}
 	case 2:
 		return &OffsetRequest{Version: version}
 	case 3:
-		return &MetadataRequest{}
+		return &MetadataRequest{Version: version}
 	case 8:
 		return &OffsetCommitRequest{Version: version}
 	case 9:
 		return &OffsetFetchRequest{Version: version}
 	case 10:
-		return &FindCoordinatorRequest{}
+		return &FindCoordinatorRequest{Version: version}
 	case 11:
-		return &JoinGroupRequest{}
+		return &JoinGroupRequest{Version: version}
 	case 12:
 		return &HeartbeatRequest{}
 	case 13:
@@ -145,13 +145,13 @@ func allocateBody(key, version int16) protocolBody {
 	case 16:
 		return &ListGroupsRequest{}
 	case 17:
-		return &SaslHandshakeRequest{}
+		return &SaslHandshakeRequest{Version: version}
 	case 18:
 		return &ApiVersionsRequest{Version: version}
 	case 19:
-		return &CreateTopicsRequest{}
+		return &CreateTopicsRequest{Version: version}
 	case 20:
-		return &DeleteTopicsRequest{}
+		return &DeleteTopicsRequest{Version: version}
 	case 21:
 		return &DeleteRecordsRequest{}
 	case 22:
@@ -167,15 +167,15 @@ func allocateBody(key, version int16) protocolBody {
 	case 29:
 		return &DescribeAclsRequest{}
 	case 30:
-		return &CreateAclsRequest{}
+		return &CreateAclsRequest{Version: version}
 	case 31:
 		return &DeleteAclsRequest{}
 	case 32:
-		return &DescribeConfigsRequest{}
+		return &DescribeConfigsRequest{Version: version}
 	case 33:
 		return &AlterConfigsRequest{}
 	case 35:
-		return &DescribeLogDirsRequest{}
+		return &DescribeLogDirsRequest{Version: version}
 	case 36:
 		return &SaslAuthenticateRequest{}
 	case 37:
@@ -185,9 +185,9 @@ func allocateBody(key, version int16) protocolBody {
 	case 44:
 		return &IncrementalAlterConfigsRequest{}
 	case 45:
-		return &AlterPartitionReassignmentsRequest{}
+		return &AlterPartitionReassignmentsRequest{Version: version}
 	case 46:
-		return &ListPartitionReassignmentsRequest{}
+		return &ListPartitionReassignmentsRequest{Version: version}
 	case 47:
 		return &DeleteOffsetsRequest{}
 	case 48:
@@ -195,9 +195,9 @@ func allocateBody(key, version int16) protocolBody {
 	case 49:
 		return &AlterClientQuotasRequest{}
 	case 50:
-		return &DescribeUserScramCredentialsRequest{}
+		return &DescribeUserScramCredentialsRequest{Version: version}
 	case 51:
-		return &AlterUserScramCredentialsRequest{}
+		return &AlterUserScramCredentialsRequest{Version: version}
 	}
 	return nil
 }
