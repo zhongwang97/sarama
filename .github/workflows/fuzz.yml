@@ -42,4 +42,5 @@ jobs:
       run: go install golang.org/dl/gotip@latest && gotip download
 
     - name: Run any fuzzing tests
-      run: gotip test -v -run=^Fuzz -test.fuzztime=5m ./...
+      run: gotip test -list . | grep '^Fuzz' | parallel 'gotip test -v -run=^{}$ -fuzz=^{}$ -fuzztime=5m'
+
