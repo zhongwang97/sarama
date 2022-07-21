@@ -19,6 +19,7 @@ import (
 	"go.uber.org/goleak"
 	"golang.org/x/sync/errgroup"
 
+	"github.com/rcrowley/go-metrics"
 	"github.com/stretchr/testify/require"
 )
 
@@ -89,6 +90,11 @@ func TestConsumerHighWaterMarkOffset(t *testing.T) {
 // only checks versions from v0.10.0.0 until KAFKA_VERSION.
 func TestVersionMatrix(t *testing.T) {
 	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
+	metrics.UseNilMetrics = true // disable Sarama's go-metrics library
+	t.Cleanup(func() {
+		metrics.UseNilMetrics = false
+	})
+
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -106,6 +112,10 @@ func TestVersionMatrix(t *testing.T) {
 // test LZ4 should start with v0.10.0.0.
 func TestVersionMatrixLZ4(t *testing.T) {
 	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
+	metrics.UseNilMetrics = true // disable Sarama's go-metrics library
+	t.Cleanup(func() {
+		metrics.UseNilMetrics = false
+	})
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -123,6 +133,10 @@ func TestVersionMatrixLZ4(t *testing.T) {
 // Support for zstd codec was introduced in v2.1.0.0
 func TestVersionMatrixZstd(t *testing.T) {
 	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
+	metrics.UseNilMetrics = true // disable Sarama's go-metrics library
+	t.Cleanup(func() {
+		metrics.UseNilMetrics = false
+	})
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -138,6 +152,10 @@ func TestVersionMatrixZstd(t *testing.T) {
 
 func TestVersionMatrixIdempotent(t *testing.T) {
 	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
+	metrics.UseNilMetrics = true // disable Sarama's go-metrics library
+	t.Cleanup(func() {
+		metrics.UseNilMetrics = false
+	})
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
