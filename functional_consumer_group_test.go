@@ -14,9 +14,12 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 func TestFuncConsumerGroupPartitioning(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	checkKafkaVersion(t, "0.10.2")
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
@@ -51,6 +54,7 @@ func TestFuncConsumerGroupPartitioning(t *testing.T) {
 }
 
 func TestFuncConsumerGroupPartitioningStateful(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	checkKafkaVersion(t, "0.10.2")
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
@@ -96,6 +100,7 @@ func TestFuncConsumerGroupPartitioningStateful(t *testing.T) {
 }
 
 func TestFuncConsumerGroupExcessConsumers(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	checkKafkaVersion(t, "0.10.2")
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
@@ -136,6 +141,7 @@ func TestFuncConsumerGroupExcessConsumers(t *testing.T) {
 }
 
 func TestFuncConsumerGroupFuzzy(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	checkKafkaVersion(t, "0.10.2")
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
@@ -195,6 +201,7 @@ func TestFuncConsumerGroupFuzzy(t *testing.T) {
 }
 
 func TestFuncConsumerGroupOffsetDeletion(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	checkKafkaVersion(t, "2.4.0")
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)

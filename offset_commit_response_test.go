@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -28,6 +30,7 @@ var (
 )
 
 func TestEmptyOffsetCommitResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	//groupInstanceId := "gid"
 	tests := []struct {
 		CaseName     string
@@ -82,6 +85,7 @@ func TestEmptyOffsetCommitResponse(t *testing.T) {
 }
 
 func TestNormalOffsetCommitResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	response := OffsetCommitResponse{}
 	response.AddError("t", 0, ErrNotLeaderForPartition)
 	response.Errors["m"] = make(map[int32]KError)
@@ -91,6 +95,7 @@ func TestNormalOffsetCommitResponse(t *testing.T) {
 }
 
 func TestOffsetCommitResponseWithThrottleTime(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	for version := 3; version <= 4; version++ {
 		response := OffsetCommitResponse{
 			Version:        int16(version),

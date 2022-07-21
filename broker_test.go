@@ -11,6 +11,7 @@ import (
 
 	"github.com/jcmturner/gokrb5/v8/krberror"
 	"github.com/rcrowley/go-metrics"
+	"go.uber.org/goleak"
 )
 
 func ExampleBroker() {
@@ -52,6 +53,7 @@ type brokerMetrics struct {
 }
 
 func TestBrokerAccessors(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	broker := NewBroker("abc:123")
 
 	if broker.ID() != -1 {
@@ -111,6 +113,7 @@ func (p produceResponsePromise) Get() (*ProduceResponse, error) {
 }
 
 func TestSimpleBrokerCommunication(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	for _, tt := range brokerTestTable {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
@@ -152,6 +155,7 @@ func TestSimpleBrokerCommunication(t *testing.T) {
 }
 
 func TestBrokerFailedRequest(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	for _, tt := range brokerFailedReqTestTable {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
@@ -212,6 +216,7 @@ func newTokenProvider(token *AccessToken, err error) *TokenProvider {
 }
 
 func TestSASLOAuthBearer(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	testTable := []struct {
 		name                      string
 		authidentity              string
@@ -358,6 +363,7 @@ func (m *MockSCRAMClient) Done() bool {
 var _ SCRAMClient = &MockSCRAMClient{}
 
 func TestSASLSCRAMSHAXXX(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	testTable := []struct {
 		name               string
 		mockHandshakeErr   KError
@@ -464,6 +470,7 @@ func TestSASLSCRAMSHAXXX(t *testing.T) {
 }
 
 func TestSASLPlainAuth(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	testTable := []struct {
 		name             string
 		authidentity     string
@@ -587,6 +594,7 @@ func TestSASLPlainAuth(t *testing.T) {
 // TestSASLReadTimeout ensures that the broker connection won't block forever
 // if the remote end never responds after the handshake
 func TestSASLReadTimeout(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	mockBroker := NewMockBroker(t, 0)
 	defer mockBroker.Close()
 
@@ -635,6 +643,7 @@ func TestSASLReadTimeout(t *testing.T) {
 }
 
 func TestGSSAPIKerberosAuth_Authorize(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	testTable := []struct {
 		name               string
 		error              error
@@ -752,6 +761,7 @@ func TestGSSAPIKerberosAuth_Authorize(t *testing.T) {
 }
 
 func TestBuildClientFirstMessage(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	testTable := []struct {
 		name        string
 		token       *AccessToken
@@ -806,6 +816,7 @@ func TestBuildClientFirstMessage(t *testing.T) {
 }
 
 func TestKip368ReAuthenticationSuccess(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	sessionLifetimeMs := int64(100)
 
 	mockBroker := NewMockBroker(t, 0)
@@ -890,6 +901,7 @@ loop:
 }
 
 func TestKip368ReAuthenticationFailure(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	sessionLifetimeMs := int64(100)
 
 	mockBroker := NewMockBroker(t, 0)

@@ -3,6 +3,8 @@ package sarama
 import (
 	"errors"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -25,6 +27,7 @@ var (
 )
 
 func TestListGroupsResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var response *ListGroupsResponse
 
 	response = new(ListGroupsResponse)

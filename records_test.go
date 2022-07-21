@@ -4,9 +4,12 @@ import (
 	"bytes"
 	"reflect"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 func TestLegacyRecords(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	set := &MessageSet{
 		Messages: []*MessageBlock{
 			{
@@ -82,6 +85,7 @@ func TestLegacyRecords(t *testing.T) {
 }
 
 func TestDefaultRecords(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	batch := &RecordBatch{
 		IsTransactional: true,
 		Version:         2,

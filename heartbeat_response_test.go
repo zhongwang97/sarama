@@ -3,6 +3,8 @@ package sarama
 import (
 	"reflect"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -20,6 +22,7 @@ var (
 )
 
 func TestHeartbeatResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	tests := []struct {
 		CaseName     string
 		Version      int16

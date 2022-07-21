@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"reflect"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -45,6 +47,7 @@ var (
 )
 
 func TestConsumerGroupMemberMetadata(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	meta := &ConsumerGroupMemberMetadata{
 		Version:  0,
 		Topics:   []string{"one", "two"},
@@ -68,6 +71,7 @@ func TestConsumerGroupMemberMetadata(t *testing.T) {
 }
 
 func TestConsumerGroupMemberMetadataV1Decode(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	meta := new(ConsumerGroupMemberMetadata)
 	if err := decode(groupMemberMetadataV1, meta); err != nil {
 		t.Error("Failed to decode V1 data", err)
@@ -78,6 +82,7 @@ func TestConsumerGroupMemberMetadataV1Decode(t *testing.T) {
 }
 
 func TestConsumerGroupMemberAssignment(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	amt := &ConsumerGroupMemberAssignment{
 		Version: 0,
 		Topics: map[string][]int32{

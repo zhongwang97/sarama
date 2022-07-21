@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -67,6 +69,7 @@ var (
 )
 
 func TestProduceResponseDecode(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	response := ProduceResponse{}
 
 	testVersionDecodable(t, "no blocks", &response, produceResponseNoBlocksV0, 0)
@@ -113,6 +116,7 @@ func TestProduceResponseDecode(t *testing.T) {
 }
 
 func TestProduceResponseEncode(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	response := ProduceResponse{}
 	response.Blocks = make(map[string]map[int32]*ProduceResponseBlock)
 	testEncodable(t, "empty", &response, produceResponseNoBlocksV0)
@@ -132,6 +136,7 @@ func TestProduceResponseEncode(t *testing.T) {
 }
 
 func TestProduceResponseEncodeInvalidTimestamp(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	response := ProduceResponse{}
 	response.Version = 2
 	response.Blocks = make(map[string]map[int32]*ProduceResponseBlock)

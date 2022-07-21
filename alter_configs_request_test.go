@@ -1,6 +1,10 @@
 package sarama
 
-import "testing"
+import (
+	"testing"
+
+	"go.uber.org/goleak"
+)
 
 var (
 	emptyAlterConfigsRequest = []byte{
@@ -41,6 +45,7 @@ var (
 )
 
 func TestAlterConfigsRequest(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var request *AlterConfigsRequest
 
 	request = &AlterConfigsRequest{

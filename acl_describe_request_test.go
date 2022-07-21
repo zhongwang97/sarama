@@ -2,6 +2,8 @@ package sarama
 
 import (
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -25,6 +27,7 @@ var (
 )
 
 func TestAclDescribeRequestV0(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	resourcename := "topic"
 	principal := "principal"
 	host := "host"
@@ -44,6 +47,7 @@ func TestAclDescribeRequestV0(t *testing.T) {
 }
 
 func TestAclDescribeRequestV1(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	resourcename := "topic"
 	principal := "principal"
 	host := "host"

@@ -1,6 +1,10 @@
 package sarama
 
-import "testing"
+import (
+	"testing"
+
+	"go.uber.org/goleak"
+)
 
 var (
 	offsetRequestNoBlocksV1 = []byte{
@@ -49,6 +53,7 @@ var (
 )
 
 func TestOffsetRequest(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(OffsetRequest)
 	testRequest(t, "no blocks", request, offsetRequestNoBlocksV1)
 
@@ -57,6 +62,7 @@ func TestOffsetRequest(t *testing.T) {
 }
 
 func TestOffsetRequestV1(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(OffsetRequest)
 	request.Version = 1
 	testRequest(t, "no blocks", request, offsetRequestNoBlocksV1)
@@ -66,6 +72,7 @@ func TestOffsetRequestV1(t *testing.T) {
 }
 
 func TestOffsetRequestV2(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(OffsetRequest)
 	request.Version = 2
 	testRequest(t, "no blocks", request, offsetRequestNoBlocksV2)
@@ -76,6 +83,7 @@ func TestOffsetRequestV2(t *testing.T) {
 }
 
 func TestOffsetRequestReplicaID(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(OffsetRequest)
 	replicaID := int32(42)
 	request.SetReplicaID(replicaID)

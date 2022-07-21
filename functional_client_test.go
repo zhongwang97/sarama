@@ -8,9 +8,12 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 func TestFuncConnectionFailure(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -27,6 +30,7 @@ func TestFuncConnectionFailure(t *testing.T) {
 }
 
 func TestFuncClientMetadata(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -70,6 +74,7 @@ func TestFuncClientMetadata(t *testing.T) {
 }
 
 func TestFuncClientCoordinator(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	checkKafkaVersion(t, "0.8.2")
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)

@@ -5,9 +5,12 @@ import (
 	"log"
 	"sync"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 func TestSyncProducer(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader := NewMockBroker(t, 2)
 
@@ -58,6 +61,7 @@ func TestSyncProducer(t *testing.T) {
 }
 
 func TestSyncProducerBatch(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader := NewMockBroker(t, 2)
 
@@ -106,6 +110,7 @@ func TestSyncProducerBatch(t *testing.T) {
 }
 
 func TestConcurrentSyncProducer(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader := NewMockBroker(t, 2)
 
@@ -150,6 +155,7 @@ func TestConcurrentSyncProducer(t *testing.T) {
 }
 
 func TestSyncProducerToNonExistingTopic(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	broker := NewMockBroker(t, 1)
 
 	metadataResponse := new(MetadataResponse)
@@ -181,6 +187,7 @@ func TestSyncProducerToNonExistingTopic(t *testing.T) {
 }
 
 func TestSyncProducerRecoveryWithRetriesDisabled(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader1 := NewMockBroker(t, 2)
 	leader2 := NewMockBroker(t, 3)

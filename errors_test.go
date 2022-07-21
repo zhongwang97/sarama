@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"net"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 func TestSentinelWithSingleWrappedError(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	t.Parallel()
 	myNetError := &net.OpError{Op: "mock", Err: errors.New("op error")}
 	error := Wrap(ErrOutOfBrokers, myNetError)
@@ -40,6 +43,7 @@ func TestSentinelWithSingleWrappedError(t *testing.T) {
 }
 
 func TestSentinelWithMultipleWrappedErrors(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	t.Parallel()
 	myNetError := &net.OpError{}
 	myAddrError := &net.AddrError{}

@@ -16,12 +16,14 @@ import (
 	"testing"
 	"time"
 
+	"go.uber.org/goleak"
 	"golang.org/x/sync/errgroup"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestFuncConsumerOffsetOutOfRange(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -42,6 +44,7 @@ func TestFuncConsumerOffsetOutOfRange(t *testing.T) {
 }
 
 func TestConsumerHighWaterMarkOffset(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -85,6 +88,7 @@ func TestConsumerHighWaterMarkOffset(t *testing.T) {
 // from this test case. It has a similar version matrix test case below that
 // only checks versions from v0.10.0.0 until KAFKA_VERSION.
 func TestVersionMatrix(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -101,6 +105,7 @@ func TestVersionMatrix(t *testing.T) {
 // Support for LZ4 codec was introduced in v0.10.0.0 so a version matrix to
 // test LZ4 should start with v0.10.0.0.
 func TestVersionMatrixLZ4(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -117,6 +122,7 @@ func TestVersionMatrixLZ4(t *testing.T) {
 
 // Support for zstd codec was introduced in v2.1.0.0
 func TestVersionMatrixZstd(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -131,6 +137,7 @@ func TestVersionMatrixZstd(t *testing.T) {
 }
 
 func TestVersionMatrixIdempotent(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -144,6 +151,7 @@ func TestVersionMatrixIdempotent(t *testing.T) {
 }
 
 func TestReadOnlyAndAllCommittedMessages(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	t.Skip("TODO: TestReadOnlyAndAllCommittedMessages is periodically failing inexplicably.")
 	checkKafkaVersion(t, "0.11.0")
 	setupFunctionalTest(t)
@@ -287,6 +295,7 @@ func TestReadOnlyAndAllCommittedMessages(t *testing.T) {
 }
 
 func TestConsumerGroupDeadlock(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 

@@ -4,6 +4,8 @@ import (
 	"context"
 	"sync"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 type handler struct {
@@ -28,6 +30,7 @@ func (h *handler) ConsumeClaim(sess ConsumerGroupSession, claim ConsumerGroupCla
 // OffsetsLoadInProgress error response, in the same way as it would for a
 // RebalanceInProgress.
 func TestConsumerGroupNewSessionDuringOffsetLoad(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	config := NewTestConfig()
 	config.ClientID = t.Name()
 	config.Version = V2_0_0_0

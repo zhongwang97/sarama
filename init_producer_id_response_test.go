@@ -3,6 +3,8 @@ package sarama
 import (
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -22,6 +24,7 @@ var (
 )
 
 func TestInitProducerIDResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	resp := &InitProducerIDResponse{
 		ThrottleTime:  100 * time.Millisecond,
 		ProducerID:    8000,

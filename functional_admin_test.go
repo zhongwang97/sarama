@@ -5,9 +5,12 @@ package sarama
 
 import (
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 func TestFuncAdminQuotas(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	checkKafkaVersion(t, "2.6.0.0")
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
@@ -125,6 +128,7 @@ func TestFuncAdminQuotas(t *testing.T) {
 }
 
 func TestFuncAdminDescribeGroups(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	checkKafkaVersion(t, "2.3.0.0")
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)

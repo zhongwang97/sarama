@@ -1,6 +1,10 @@
 package sarama
 
-import "testing"
+import (
+	"testing"
+
+	"go.uber.org/goleak"
+)
 
 var (
 	aclCreateRequest = []byte{
@@ -25,6 +29,7 @@ var (
 )
 
 func TestCreateAclsRequestv0(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	req := &CreateAclsRequest{
 		Version: 0,
 		AclCreations: []*AclCreation{
@@ -47,6 +52,7 @@ func TestCreateAclsRequestv0(t *testing.T) {
 }
 
 func TestCreateAclsRequestv1(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	req := &CreateAclsRequest{
 		Version: 1,
 		AclCreations: []*AclCreation{

@@ -15,28 +15,33 @@ import (
 
 	toxiproxy "github.com/Shopify/toxiproxy/v2/client"
 	"github.com/rcrowley/go-metrics"
+	"go.uber.org/goleak"
 )
 
 const TestBatchSize = 1000
 
 func TestFuncProducing(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	config := NewTestConfig()
 	testProducingMessages(t, config)
 }
 
 func TestFuncProducingGzip(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	config := NewTestConfig()
 	config.Producer.Compression = CompressionGZIP
 	testProducingMessages(t, config)
 }
 
 func TestFuncProducingSnappy(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	config := NewTestConfig()
 	config.Producer.Compression = CompressionSnappy
 	testProducingMessages(t, config)
 }
 
 func TestFuncProducingZstd(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	config := NewTestConfig()
 	config.Version = V2_1_0_0
 	config.Producer.Compression = CompressionZSTD
@@ -44,12 +49,14 @@ func TestFuncProducingZstd(t *testing.T) {
 }
 
 func TestFuncProducingNoResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	config := NewTestConfig()
 	config.Producer.RequiredAcks = NoResponse
 	testProducingMessages(t, config)
 }
 
 func TestFuncProducingFlushing(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	config := NewTestConfig()
 	config.Producer.Flush.Messages = TestBatchSize / 8
 	config.Producer.Flush.Frequency = 250 * time.Millisecond
@@ -57,6 +64,7 @@ func TestFuncProducingFlushing(t *testing.T) {
 }
 
 func TestFuncMultiPartitionProduce(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -90,6 +98,7 @@ func TestFuncMultiPartitionProduce(t *testing.T) {
 }
 
 func TestFuncProducingToInvalidTopic(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -106,6 +115,7 @@ func TestFuncProducingToInvalidTopic(t *testing.T) {
 }
 
 func TestFuncProducingIdempotentWithBrokerFailure(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 
@@ -183,6 +193,7 @@ func TestFuncProducingIdempotentWithBrokerFailure(t *testing.T) {
 }
 
 func TestInterceptors(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	config := NewTestConfig()
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
@@ -342,6 +353,7 @@ func testProducingMessages(t *testing.T, config *Config) {
 //
 // https://github.com/Shopify/sarama/issues/2129
 func TestAsyncProducerRemoteBrokerClosed(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	setupFunctionalTest(t)
 	defer teardownFunctionalTest(t)
 

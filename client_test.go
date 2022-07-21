@@ -8,6 +8,8 @@ import (
 	"syscall"
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 func safeClose(t testing.TB, c io.Closer) {
@@ -18,6 +20,7 @@ func safeClose(t testing.TB, c io.Closer) {
 }
 
 func TestSimpleClient(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 
 	seedBroker.Returns(new(MetadataResponse))
@@ -32,6 +35,7 @@ func TestSimpleClient(t *testing.T) {
 }
 
 func TestCachedPartitions(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 
 	replicas := []int32{3, 1, 5}
@@ -71,6 +75,7 @@ func TestCachedPartitions(t *testing.T) {
 }
 
 func TestClientDoesntCachePartitionsForTopicsWithErrors(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 
 	replicas := []int32{seedBroker.BrokerID()}
@@ -125,6 +130,7 @@ func TestClientDoesntCachePartitionsForTopicsWithErrors(t *testing.T) {
 }
 
 func TestClientSeedBrokers(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 
 	metadataResponse := new(MetadataResponse)
@@ -141,6 +147,7 @@ func TestClientSeedBrokers(t *testing.T) {
 }
 
 func TestClientMetadata(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader := NewMockBroker(t, 5)
 
@@ -216,6 +223,7 @@ func TestClientMetadata(t *testing.T) {
 }
 
 func TestClientMetadataWithOfflineReplicas(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader := NewMockBroker(t, 5)
 
@@ -304,6 +312,7 @@ func TestClientMetadataWithOfflineReplicas(t *testing.T) {
 }
 
 func TestClientGetOffset(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader := NewMockBroker(t, 2)
 	leaderAddr := leader.Addr()
@@ -352,6 +361,7 @@ func TestClientGetOffset(t *testing.T) {
 }
 
 func TestClientReceivingUnknownTopicWithBackoffFunc(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 
 	metadataResponse1 := new(MetadataResponse)
@@ -389,6 +399,7 @@ func TestClientReceivingUnknownTopicWithBackoffFunc(t *testing.T) {
 }
 
 func TestClientReceivingUnknownTopic(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 
 	metadataResponse1 := new(MetadataResponse)
@@ -425,6 +436,7 @@ func TestClientReceivingUnknownTopic(t *testing.T) {
 }
 
 func TestClientReceivingPartialMetadata(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader := NewMockBroker(t, 5)
 
@@ -480,6 +492,7 @@ func TestClientReceivingPartialMetadata(t *testing.T) {
 }
 
 func TestClientRefreshBehaviour(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	leader := NewMockBroker(t, 5)
 
@@ -517,6 +530,7 @@ func TestClientRefreshBehaviour(t *testing.T) {
 }
 
 func TestClientRefreshBrokers(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	initialSeed := NewMockBroker(t, 0)
 	defer initialSeed.Close()
 	leader := NewMockBroker(t, 5)
@@ -550,6 +564,7 @@ func TestClientRefreshBrokers(t *testing.T) {
 }
 
 func TestClientRefreshMetadataBrokerOffline(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	defer seedBroker.Close()
 	leader := NewMockBroker(t, 5)
@@ -583,6 +598,7 @@ func TestClientRefreshMetadataBrokerOffline(t *testing.T) {
 }
 
 func TestClientGetBroker(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	defer seedBroker.Close()
 	leader := NewMockBroker(t, 5)
@@ -622,6 +638,7 @@ func TestClientGetBroker(t *testing.T) {
 }
 
 func TestClientResurrectDeadSeeds(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	initialSeed := NewMockBroker(t, 0)
 	emptyMetadata := new(MetadataResponse)
 	initialSeed.Returns(emptyMetadata)
@@ -683,6 +700,7 @@ func TestClientResurrectDeadSeeds(t *testing.T) {
 
 //nolint:paralleltest
 func TestClientController(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	defer seedBroker.Close()
 	controllerBroker := NewMockBroker(t, 2)
@@ -729,6 +747,7 @@ func TestClientController(t *testing.T) {
 }
 
 func TestClientMetadataTimeout(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	tests := []struct {
 		name    string
 		timeout time.Duration
@@ -814,6 +833,7 @@ func TestClientMetadataTimeout(t *testing.T) {
 }
 
 func TestClientUpdateMetadataErrorAndRetry(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 
 	metadataResponse1 := new(MetadataResponse)
@@ -852,6 +872,7 @@ func TestClientUpdateMetadataErrorAndRetry(t *testing.T) {
 }
 
 func TestClientCoordinatorWithConsumerOffsetsTopic(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	staleCoordinator := NewMockBroker(t, 2)
 	freshCoordinator := NewMockBroker(t, 3)
@@ -931,6 +952,7 @@ func TestClientCoordinatorWithConsumerOffsetsTopic(t *testing.T) {
 }
 
 func TestClientCoordinatorWithoutConsumerOffsetsTopic(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	coordinator := NewMockBroker(t, 2)
 
@@ -984,6 +1006,7 @@ func TestClientCoordinatorWithoutConsumerOffsetsTopic(t *testing.T) {
 }
 
 func TestClientAutorefreshShutdownRace(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	seedBroker := NewMockBroker(t, 1)
 	defer seedBroker.Close()
 
@@ -1027,6 +1050,7 @@ func TestClientAutorefreshShutdownRace(t *testing.T) {
 }
 
 func TestClientConnectionRefused(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	t.Parallel()
 	seedBroker := NewMockBroker(t, 1)
 	seedBroker.Close()
@@ -1042,6 +1066,7 @@ func TestClientConnectionRefused(t *testing.T) {
 }
 
 func TestClientCoordinatorConnectionRefused(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	t.Parallel()
 	seedBroker := NewMockBroker(t, 1)
 	seedBroker.Returns(new(MetadataResponse))
@@ -1067,6 +1092,7 @@ func TestClientCoordinatorConnectionRefused(t *testing.T) {
 }
 
 func TestInitProducerIDConnectionRefused(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	t.Parallel()
 	seedBroker := NewMockBroker(t, 1)
 	seedBroker.Returns(&MetadataResponse{Version: 1})

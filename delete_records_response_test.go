@@ -3,6 +3,8 @@ package sarama
 import (
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 var deleteRecordsResponse = []byte{
@@ -21,6 +23,7 @@ var deleteRecordsResponse = []byte{
 }
 
 func TestDeleteRecordsResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	resp := &DeleteRecordsResponse{
 		Version:      0,
 		ThrottleTime: 100 * time.Millisecond,

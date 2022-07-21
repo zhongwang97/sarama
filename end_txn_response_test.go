@@ -3,6 +3,8 @@ package sarama
 import (
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 var endTxnResponse = []byte{
@@ -11,6 +13,7 @@ var endTxnResponse = []byte{
 }
 
 func TestEndTxnResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	resp := &EndTxnResponse{
 		ThrottleTime: 100 * time.Millisecond,
 		Err:          ErrInvalidProducerIDMapping,

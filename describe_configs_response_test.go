@@ -2,6 +2,8 @@ package sarama
 
 import (
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -93,6 +95,7 @@ var (
 )
 
 func TestDescribeConfigsResponsev0(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var response *DescribeConfigsResponse
 
 	response = &DescribeConfigsResponse{
@@ -127,6 +130,7 @@ func TestDescribeConfigsResponsev0(t *testing.T) {
 }
 
 func TestDescribeConfigsResponseWithDefaultv0(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var response *DescribeConfigsResponse
 
 	response = &DescribeConfigsResponse{
@@ -161,6 +165,7 @@ func TestDescribeConfigsResponseWithDefaultv0(t *testing.T) {
 }
 
 func TestDescribeConfigsResponsev1(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var response *DescribeConfigsResponse
 
 	response = &DescribeConfigsResponse{
@@ -197,6 +202,7 @@ func TestDescribeConfigsResponsev1(t *testing.T) {
 }
 
 func TestDescribeConfigsResponseWithSynonym(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var response *DescribeConfigsResponse
 
 	response = &DescribeConfigsResponse{
@@ -239,6 +245,7 @@ func TestDescribeConfigsResponseWithSynonym(t *testing.T) {
 }
 
 func TestDescribeConfigsResponseWithDefaultv1(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var response *DescribeConfigsResponse
 
 	response = &DescribeConfigsResponse{

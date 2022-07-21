@@ -1,6 +1,10 @@
 package sarama
 
-import "testing"
+import (
+	"testing"
+
+	"go.uber.org/goleak"
+)
 
 var (
 	describeClientQuotasRequestAll = []byte{
@@ -37,6 +41,7 @@ var (
 )
 
 func TestDescribeClientQuotasRequest(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	// Match All
 	req := &DescribeClientQuotasRequest{
 		Components: []QuotaFilterComponent{},

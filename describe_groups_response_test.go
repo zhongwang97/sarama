@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/goleak"
 )
 
 var (
@@ -38,6 +39,7 @@ var (
 )
 
 func TestDescribeGroupsResponseV0(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var response *DescribeGroupsResponse
 
 	response = new(DescribeGroupsResponse)
@@ -161,6 +163,7 @@ var (
 )
 
 func TestDescribeGroupsResponseV1plus(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	groupInstanceId := "gid"
 	tests := []struct {
 		Name         string

@@ -3,6 +3,8 @@ package sarama
 import (
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -74,6 +76,7 @@ var (
 )
 
 func TestProduceRequest(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(ProduceRequest)
 	testRequest(t, "empty", request, produceRequestEmpty)
 

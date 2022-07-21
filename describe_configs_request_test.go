@@ -1,6 +1,10 @@
 package sarama
 
-import "testing"
+import (
+	"testing"
+
+	"go.uber.org/goleak"
+)
 
 var (
 	emptyDescribeConfigsRequest = []byte{
@@ -49,6 +53,7 @@ var (
 )
 
 func TestDescribeConfigsRequestv0(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var request *DescribeConfigsRequest
 
 	request = &DescribeConfigsRequest{
@@ -102,6 +107,7 @@ func TestDescribeConfigsRequestv0(t *testing.T) {
 }
 
 func TestDescribeConfigsRequestv1(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := &DescribeConfigsRequest{
 		Version: 1,
 		Resources: []*ConfigResource{

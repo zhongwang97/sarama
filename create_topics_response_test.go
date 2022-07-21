@@ -4,6 +4,8 @@ import (
 	"errors"
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -30,6 +32,7 @@ var (
 )
 
 func TestCreateTopicsResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	resp := &CreateTopicsResponse{
 		TopicErrors: map[string]*TopicError{
 			"topic": {
@@ -53,6 +56,7 @@ func TestCreateTopicsResponse(t *testing.T) {
 }
 
 func TestTopicError(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	// Assert that TopicError satisfies error interface
 	var err error = &TopicError{
 		Err: ErrTopicAuthorizationFailed,

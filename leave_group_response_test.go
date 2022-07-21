@@ -3,6 +3,8 @@ package sarama
 import (
 	"reflect"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -26,6 +28,7 @@ var (
 )
 
 func TestLeaveGroupResponse(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	groupInstanceId := "gid"
 	tests := []struct {
 		CaseName     string

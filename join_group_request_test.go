@@ -3,6 +3,8 @@ package sarama
 import (
 	"reflect"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -37,6 +39,7 @@ var (
 )
 
 func TestJoinGroupRequest(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(JoinGroupRequest)
 	request.GroupId = "TestGroup"
 	request.SessionTimeout = 100
@@ -45,6 +48,7 @@ func TestJoinGroupRequest(t *testing.T) {
 }
 
 func TestJoinGroupRequestV0_OneProtocol(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(JoinGroupRequest)
 	request.GroupId = "TestGroup"
 	request.SessionTimeout = 100
@@ -58,6 +62,7 @@ func TestJoinGroupRequestV0_OneProtocol(t *testing.T) {
 }
 
 func TestJoinGroupRequestDeprecatedEncode(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(JoinGroupRequest)
 	request.GroupId = "TestGroup"
 	request.SessionTimeout = 100
@@ -71,6 +76,7 @@ func TestJoinGroupRequestDeprecatedEncode(t *testing.T) {
 }
 
 func TestJoinGroupRequestV1(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	request := new(JoinGroupRequest)
 	request.Version = 1
 	request.GroupId = "TestGroup"
@@ -100,6 +106,7 @@ var (
 )
 
 func TestJoinGroupRequestV3plus(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	groupInstanceId := "gid"
 	tests := []struct {
 		CaseName     string

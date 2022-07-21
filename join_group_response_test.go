@@ -4,6 +4,8 @@ import (
 	"errors"
 	"reflect"
 	"testing"
+
+	"go.uber.org/goleak"
 )
 
 var (
@@ -57,6 +59,7 @@ var (
 )
 
 func TestJoinGroupResponseV0(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	var response *JoinGroupResponse
 
 	response = new(JoinGroupResponse)
@@ -121,6 +124,7 @@ func TestJoinGroupResponseV0(t *testing.T) {
 }
 
 func TestJoinGroupResponseV1(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	response := new(JoinGroupResponse)
 	testVersionDecodable(t, "no error", response, joinGroupResponseV1, 1)
 	if !errors.Is(response.Err, ErrNoError) {
@@ -147,6 +151,7 @@ func TestJoinGroupResponseV1(t *testing.T) {
 }
 
 func TestJoinGroupResponseV2(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	response := new(JoinGroupResponse)
 	testVersionDecodable(t, "no error", response, joinGroupResponseV2, 2)
 	if response.ThrottleTime != 100 {
@@ -191,6 +196,7 @@ var (
 )
 
 func TestJoinGroupResponse3plus(t *testing.T) {
+	t.Cleanup(func() { goleak.IgnoreTopFunction("github.com/rcrowley/go-metrics.(*meterArbiter).tick") })
 	groupInstanceId := "gid"
 	tests := []struct {
 		CaseName     string
